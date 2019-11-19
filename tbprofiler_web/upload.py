@@ -21,6 +21,7 @@ def upload():
 		uniq_id = str(uuid.uuid4())
 		filename1 = secure_filename(request.files['file1'].filename)
 		filename2 = secure_filename(request.files['file2'].filename)
+		error=None
 		if filename1=="":
 			error = "No file found for read 1, please try again!"
 		if error==None:
@@ -28,7 +29,7 @@ def upload():
 			if filename2!="": request.files['file2'].save(os.path.join(app.config["UPLOAD_FOLDER"], filename2))
 			server_fname1 = "/tmp/%s" % filename1
 			server_fname2 = "/tmp/%s" % filename2 if filename2!="" else None
-			sample_name = uniq_id if request.form["sample_name"]=="" else request.form["sample_name"]
+			sample_name = uniq_id #if request.form["sample_name"]=="" else request.form["sample_name"]
 			print(sample_name)
 			db.execute("INSERT INTO results (id,sample_name,result) VALUES (?,?,?)",(uniq_id,sample_name,"{}"))
 			db.commit()

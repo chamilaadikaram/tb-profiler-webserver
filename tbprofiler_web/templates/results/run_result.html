@@ -7,7 +7,7 @@
 
 {% block content %}
 {% if run['result']=={} %}
-	<div class="warning">This run is still processing. Please come back later.</div>
+	<div class="alert alert-warning mt-4" role="alert">Your run ID is: <b>{{run["id"]}}</b>. This run is still processing. Please come back later.</div>
 {% else %}
 	<div class="card border-dark mb-3">
 		<div class="card-header">Summary</div>

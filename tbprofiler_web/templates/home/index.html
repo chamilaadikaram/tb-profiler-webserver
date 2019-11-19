@@ -26,42 +26,58 @@
 				uses Trimmomatic to trim the reads, BWA (or minimap2 for nanopore) to
 				align to the reference genome and GATK (open source v4) to call variants.
 			</div>
-			<div class="card text-center">
-			  <div class="card-header">
-			    Step 1
-			  </div>
-			  <div class="card-body">
-			    <h5 class="card-title">Profile your sample</h5>
-			    <p class="card-text">
-						Upload your next generation sequencing data in <b>fastQ</b> format.
-						You can upload one or two (forward and reverse) fastq files. When you
-						upload your data, the run will be be assigned a unique ID.
-						Please take a note of this ID as you will need to to find your results later
-					</p>
-			    <a class="btn btn-primary" href="{{ url_for('upload.upload') }}">Upload</a>
-			  </div>
+			<div class="row justify-content-md-center">
+				<div class="col-md-6 pb-4">
+					<div class="card text-center">
+					  <div class="card-header">
+					    Step 1
+					  </div>
+					  <div class="card-body">
+					    <h5 class="card-title">Profile your sample</h5>
+
+									<p class="card-text">
+										Upload your next generation sequencing data in <b>fastQ</b> format.
+										You can upload one or two (forward and reverse) fastq files. When you
+										upload your data, the run will be be assigned a unique ID.
+										Please take a note of this ID as you will need to to find your results later
+									</p>
+
+
+					    <a class="btn btn-primary" href="{{ url_for('upload.upload') }}">Upload</a>
+					  </div>
+					</div>
+				</div>
 			</div>
-			<div class="card text-center">
-			  <div class="card-header">
-			    Step 2
-			  </div>
-			  <div class="card-body">
-			    <h5 class="card-title">View the results</h5>
-			    <p class="card-text">
-						Find your results by searching for your unique ID in the
-						<a class="" href="{{ url_for('results.result_table') }}">results table</a>
-						or by entering it directly into the search box below.
-					</p>
-					<form method="post" enctype=multipart/form-data>
-						<div class="row justify-content-md-center">
-							<div class="col-md-4">
-								<input type="text" name="sample_id" class="form-control" placeholder="Sample ID">
-							</div>
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</div>
-					</form>
-			  </div>
+
+
+			<div class="row justify-content-md-center">
+				<div class="col-md-6 pb-4">
+					<div class="card text-center">
+					  <div class="card-header">
+					    Step 2
+					  </div>
+					  <div class="card-body">
+					    <h5 class="card-title">View the results</h5>
+
+									<p class="card-text">
+										Find your results by searching for your unique ID in the
+										<a class="" href="{{ url_for('results.result_table') }}">results table</a>
+										or by entering it directly into the search box below.
+									</p>
+
+							<form method="post" enctype=multipart/form-data>
+								<div class="row justify-content-md-center">
+									<div class="col-md-6">
+										<input type="text" name="sample_id" class="form-control" placeholder="Sample ID">
+									</div>
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+							</form>
+					  </div>
+					</div>
+				</div>
 			</div>
+
 			<h6 class="pt-4">Disclaimer</h6>
 			<div class="">
 				This tool is for Research Use Only. It has not been approved, cleared,
