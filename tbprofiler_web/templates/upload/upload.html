@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="pt-4 pb-4">
+	Upload your next generation sequencing data in <b>fastQ</b> format.
+	You can upload one or two (forward and reverse) fastq files. When you
+	upload your data, the run will be be assigned a unique ID.
+	Please take a note of this ID as you will need to to find your results later
+</div>
+
+<form method="post" enctype=multipart/form-data>
+	<input type="text" name="sample_name" class="form-control " placeholder="Sample name">
+	<div class="form-group pt-2">
+		<label for="file1">Fastq file 1:</label>
+		<input type="file" name="file1" class="form-control-file" id="file1">
+	</div>
+	<div class="form-group">
+		<label for="file2">Fastq file 2 (optional):</label>
+		<input type="file" name="file2" class="form-control-file" id="file2">
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="radio" name="platform" id="IlluminaRadio" value="Illumina" checked>
+		<label class="form-check-label" for="IlluminaRadio">
+			Illumina
+		</label>
+	</div>
+	<div class="form-check">
+		<input class="form-check-input" type="radio" name="platform" id="OxfordNanoporeRadio" value="minION">
+		<label class="form-check-label" for="OxfordNanoporeRadio">
+			Oxford Nanopore
+		</label>
+	</div>
+	<hr>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

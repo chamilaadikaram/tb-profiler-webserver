@@ -1,0 +1,123 @@
+{% import 'utils.html' as utils %}
+
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+{% if run['result']=={} %}
+	<div class="warning">This run is still processing. Please come back later.</div>
+{% else %}
+	<div class="card border-dark mb-3">
+		<div class="card-header">Summary</div>
+		<div class="card-body text-dark">
+			<p class="card-text"><b>Run ID:</b> {{ run["id"] }}</p>
+			<p class="card-text"><b>Sample name:</b> {{ run["result"]["id"] }}</p>
+			<p class="card-text"><b>Date:</b> {{ run["created"] }}</p>
+			<p class="card-text"><b>Strain:</b> {{ run["result"]["sublin"] }}</p>
+			<p class="card-text"><b>Drug-resistance:</b> {{ utils.drtype_badge(run["result"]["drtype"]) }}</p>
+			<hr>
+			<form method="post" enctype=multipart/form-data>
+			<button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#drugTable" aria-expanded="false" aria-controls="collapseExample">
+    		Drug resistance
+  		</button>
+			<button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#lineageTable" aria-expanded="false" aria-controls="collapseExample">
+				Lineage
+			</button>
+			<button class="btn btn-outline-primary" type="button" data-toggle="collapse" data-target="#nonAssocMutations" aria-expanded="false" aria-controls="collapseExample">
+				Non-associated mutations
+			</button>
+
+				<button class="btn btn-outline-success" type="submit">
+					Download CSV
+				</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="collapse" id="drugTable">
+		<div class="card">
+			<div class="card-header">Drug resistance: This table reports drug-resistance asociated mutations found in known resistance genes</div>
+		  <div class="card-body">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">Drug</th>
+				      <th scope="col">Resistance</th>
+				      <th scope="col">Supporting mutations</th>
+				    </tr>
+					</thead>
+				  <tbody>
+					{% for drug_row in run["result"]["drug_table"] %}
+						<tr>
+							<td>{{ drug_row["Drug"] }}</td>
+							<td>{{ drug_row["Genotypic Resistance"] }}</td>
+							<td>{{ drug_row["Mutations"] }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+		  </div>
+		</div>
+	</div>
+
+	<div class="collapse" id="lineageTable">
+		<div class="card">
+			<div class="card-header">Lineage Table: The lineage is inferred by analysing lineage specific SNPs</div>
+		  <div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Lineage</th>
+							<th scope="col">Family</th>
+							<th scope="col">Main Spoligotype</th>
+							<th scope="col">RDs</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for drug_row in run["result"]["lineage"] %}
+						<tr>
+							<td>{{ drug_row["lin"] }}</td>
+							<td>{{ drug_row["family"] }}</td>
+							<td>{{ drug_row["spoligotype"] }}</td>
+							<td>{{ drug_row["rd"] }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+		  </div>
+		</div>
+	</div>
+
+	<div class="collapse" id="nonAssocMutations">
+		<div class="card">
+			<div class="card-header">Non-Associated Mutations: This table reports mutations found in candidate resistance genes which have not been associated with drug resistance</div>
+		  <div class="card-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Gene</th>
+							<th scope="col">Chromosome position</th>
+							<th scope="col">Mutation</th>
+							<th scope="col">Estimated fraction</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for drug_row in run["result"]["other_variants"] %}
+						<tr>
+							<td>{{ drug_row["gene"] }}</td>
+							<td>{{ drug_row["genome_pos"] }}</td>
+							<td>{{ drug_row["change"] }}</td>
+							<td>{{ drug_row["freq"] }}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table
+		  </div>
+		</div>
+	</div>
+
+{% endif %}
+
+{% endblock %}

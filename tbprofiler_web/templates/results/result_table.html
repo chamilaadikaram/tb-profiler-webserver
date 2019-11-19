@@ -1,0 +1,41 @@
+{% import 'utils.html' as utils %}
+{% extends 'base.html' %}
+
+{% block header %}
+
+
+{% endblock %}
+
+{% block content %}
+<div class="pt-4">
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">Date analysed</th>
+				<th scope="col">Status</th>
+			</tr>
+		</thead>
+		<tbody id="resultsTable">
+			{% for result in results %}
+				<tr>
+					<td><a href="{{ url_for('results.run_result', sample_id=result['id']) }}">{{ result['sample_name'] }}</a></td>
+					<td>{{ result['created'] }}</td>
+					{% if result['result']=={} %}
+
+						<td>
+							<span class="badge badge-warning">Processing</span>
+						</td>
+
+					{% else %}
+						<td>
+							<span class="badge badge-success">Completed</span>
+						</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{% endblock %}
