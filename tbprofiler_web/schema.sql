@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS results;
+
+CREATE TABLE results (
+  id TEXT PRIMARY KEY,
+	sample_name TEXT NOT NULL,
+	result TEXT,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	user_id TEXT
+);
