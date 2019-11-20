@@ -7,34 +7,105 @@
 
 {% block content %}
 <div class="pt-4 pb-4">
-	Upload your next generation sequencing data in <b>fastQ</b> format.
-	You can upload one or two (forward and reverse) fastq files. When you
-	upload your data, the run will be be assigned a unique ID.
-	Please take a note of this ID as you will need to to find your results later
+	Upload your next generation sequencing data in <b>fastQ</b> format. Files will
+	be processed using the tb-profiler pipeline with default parameters. You may
+	select the technology used to generate the data (Illumina or Oxford Nanopore).
+	Samples will be process with a first in first out method so please be patient
+	as there may be runs waiting to be proessed before yours. To find out how many
+	are still in the queue, take a look at the <a href="{{ url_for('results.result_table') }}">results page</a>.
+	If you require many	isolates to be processed and have access to a linux or osX
+	operating system then	it might be worthwhile to run the commandline version of
+	tb-profiler. For more	information on this please visit the
+	<a href="https://github.com/jodyphelan/TBProfiler/">github repository</a>
 </div>
 
-<form method="post" enctype=multipart/form-data>
-	<div class="form-group pt-2">
-		<label for="file1">Fastq file 1:</label>
-		<input type="file" name="file1" class="form-control-file" id="file1">
+
+
+
+<div class="row justify-content-md-center">
+	<div class="col-md-6 pb-4">
+		<div class="card">
+			<div class="card-header">
+				Single sample
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					You can upload one or two (forward and reverse) fastq files. When you
+					upload your data, the run will be be assigned a unique ID. Please take
+					a note of this ID as you will need to to find your results later.
+				</p>
+				<form method="post" enctype=multipart/form-data>
+					<div class="form-group pt-2">
+						<label for="file1">Fastq file 1:</label>
+						<input type="file" name="file1" class="form-control-file" id="file1">
+					</div>
+					<div class="form-group">
+						<label for="file2">Fastq file 2 (optional):</label>
+						<input type="file" name="file2" class="form-control-file" id="file2">
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="platform" id="IlluminaRadio" value="Illumina" checked>
+						<label class="form-check-label" for="IlluminaRadio">
+							Illumina
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="platform" id="OxfordNanoporeRadio" value="minION">
+						<label class="form-check-label" for="OxfordNanoporeRadio">
+							Oxford Nanopore
+						</label>
+					</div>
+					<hr>
+					<button type="submit" class="btn btn-primary" name="single_sample_submit" id="single_sample_submit">Submit</button>
+				</form>
+			</div>
+		</div>
 	</div>
-	<div class="form-group">
-		<label for="file2">Fastq file 2 (optional):</label>
-		<input type="file" name="file2" class="form-control-file" id="file2">
+</div>
+
+
+
+
+
+
+
+
+<div class="row justify-content-md-center">
+	<div class="col-md-6 pb-4">
+		<div class="card">
+			<div class="card-header">
+				Batch upload
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					You can upload multiple samples together to batch process them. At the
+					 moment batch uploading only supports paried end reads. Files must be labeled using
+					 <b>_1.fastq.gz</b> and <b>_2.fastq.gz</b> as the file endings in order for them
+					 to be paired correctly. Please ensure all file names conform to this
+					 naming pattern before proceeding.
+				</p>
+				<form method="post" enctype=multipart/form-data>
+					<div class="form-group pt-2">
+						<label for="file1">Fastq files</label>
+						<input type="file" name="files" class="form-control-file" id="files" multiple>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="platform" id="IlluminaRadio" value="Illumina" checked>
+						<label class="form-check-label" for="IlluminaRadio">
+							Illumina
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="platform" id="OxfordNanoporeRadio" value="minION">
+						<label class="form-check-label" for="OxfordNanoporeRadio">
+							Oxford Nanopore
+						</label>
+					</div>
+					<hr>
+					<button type="submit" class="btn btn-primary" name="multi_sample_submit" id="multi_sample_submit">Submit</button>
+				</form>
+			</div>
+		</div>
 	</div>
-	<div class="form-check">
-		<input class="form-check-input" type="radio" name="platform" id="IlluminaRadio" value="Illumina" checked>
-		<label class="form-check-label" for="IlluminaRadio">
-			Illumina
-		</label>
-	</div>
-	<div class="form-check">
-		<input class="form-check-input" type="radio" name="platform" id="OxfordNanoporeRadio" value="minION">
-		<label class="form-check-label" for="OxfordNanoporeRadio">
-			Oxford Nanopore
-		</label>
-	</div>
-	<hr>
-	<button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</div>
 {% endblock %}

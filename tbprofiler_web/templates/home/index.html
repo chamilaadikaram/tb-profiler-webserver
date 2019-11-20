@@ -13,19 +13,21 @@
 			<div class="pb-4">
 				Welcome to the webserver of TB-Profiler - a pipeline which allows users
 				to analyse <i>M. tuberculosis</i> whole genome sequencing data to
-				predict lineage and drug resistance. Click on the buttons below to
+				predict lineage and drug resistance. Follow the instructions below to
 				upload a new sample or view analysed runs.
 			</div>
 
 
 
-			<h6 class="pt-4">How does it work?</h6>
+			<h6 class="">How does it work?</h6>
 			<div class="pb-4">
 				The pipeline searches for small variants and big deletions associated
 				with drug resistance. It will also report the lineage. By default it
 				uses Trimmomatic to trim the reads, BWA (or minimap2 for nanopore) to
 				align to the reference genome and GATK (open source v4) to call variants.
 			</div>
+
+
 			<div class="row justify-content-md-center">
 				<div class="col-md-6 pb-4">
 					<div class="card text-center">
@@ -78,7 +80,30 @@
 				</div>
 			</div>
 
-			<h6 class="pt-4">Disclaimer</h6>
+
+
+			<h6 class="pt-4">Which mutations are being used to prodict resistance?</h6>
+			<div class="pb-4">
+				Resistance is predicted using the curated <a href="https://github.com/jodyphelan/tbdb">tbdb database</a>.
+				This database has been tested using over 17,000 samples with genptypic and
+				phenotypic data. You can read more about the markers present in the library
+				at the time of testing <a href="https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-019-0650-x">here</a> or you can take a look at the
+				up to date CSV file <a href="https://github.com/jodyphelan/tbdb/blob/master/tbdb.csv">here</a>.
+			</div>
+
+
+
+			<h6 class="pt-4">Citation</h6>
+			<div class="pb-4">
+				Phelan, J. E. et al. Integrating informatics tools and portable sequencing
+				technology for rapid detection of resistance to anti-tuberculous drugs.
+				Genome Med. 11, 41 (2019).
+			</div>
+
+
+
+			<hr>
+			<h6 class="">Disclaimer</h6>
 			<div class="">
 				This tool is for Research Use Only. It has not been approved, cleared,
 				or licensed by any regulatory authority. By submitting sequence data the
