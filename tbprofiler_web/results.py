@@ -10,16 +10,6 @@ import tbprofiler as tbp
 bp = Blueprint('results', __name__)
 
 
-@bp.route('/results')
-def result_table():
-	db = get_db()
-	tmp = db.execute("select * from results").fetchall()
-	results = []
-	for x in tmp:
-		r = dict(x)
-		r["result"] = json.loads(r["result"])
-		results.append(r)
-	return render_template('results/result_table.html',results=results[::-1])
 
 @bp.route('/results/<uuid:sample_id>',methods=('GET', 'POST'))
 def run_result(sample_id):
@@ -46,3 +36,16 @@ def run_result(sample_id):
 		csv = tbp.load_csv(csv_strings)
 		return Response(csv,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=%s.csv" % sample_id})
 	return render_template('results/run_result.html',run=run)
+
+
+
+
+
+
+######## Unused Code ###########
+
+# @bp.route('/results')
+# def result_table():
+# 	db = get_db()
+# 	tmp = db.execute("select id,sample_name,created,status,lineage,drtype from results").fetchall()
+# 	return render_template('results/result_table.html',results=tmp)

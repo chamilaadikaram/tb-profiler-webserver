@@ -21,16 +21,20 @@
 				<tr>
 					<td><a href="{{ url_for('results.run_result', sample_id=result['id']) }}">{{ result['sample_name'] }}</a></td>
 					<td>{{ result['created'] }}</td>
-					{% if result['result']=={} %}
-
+					{% if result['status']=="processing" %}
+						<td></td>
+						<td></td>
 						<td>
 							<span class="badge badge-warning">Processing</span>
 						</td>
 
 					{% else %}
+						<td>{{ utils.drtype_badge(result["drtype"]) }}</td>
+						<td>{{ result["lineage"] }}</td>
 						<td>
 							<span class="badge badge-success">Completed</span>
 						</td>
+
 					{% endif %}
 				</tr>
 			{% endfor %}

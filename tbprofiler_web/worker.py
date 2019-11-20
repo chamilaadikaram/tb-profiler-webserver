@@ -41,7 +41,7 @@ def tbprofiler(fq1,fq2,uniq_id,sample_name,db,storage_dir):
 
 	conn = sqlite3.connect(db)
 	c = conn.cursor()
-	c.execute("UPDATE results SET result = ? where id = ?", (open(storage_dir+"/"+sample_name+".results.json").readline(),uniq_id,))
+	c.execute("UPDATE results SET result = ?, lineage = ?, drtype = ?, status = 'completed' where id = ?", (open(storage_dir+"/"+sample_name+".results.json").readline(),results["sublin"],results["drtype"],uniq_id,))
 	conn.commit()
 	pp.run_cmd("rm %s/%s*" % (storage_dir,uniq_id))
 
