@@ -6,7 +6,6 @@ import json
 #from aseantb.auth import login_required
 from tbprofiler_web.db import get_db
 import tbprofiler as tbp
-
 bp = Blueprint('results', __name__)
 
 
@@ -16,7 +15,7 @@ def run_result(sample_id):
 	db = get_db()
 	tmp = db.execute("SELECT * FROM results WHERE id = ?", (str(sample_id),) ).fetchone()
 	if tmp == None:
-		error = "Run does not exists"
+		error = "Run does not exist"
 		abort(404)
 	run = dict(tmp)
 	run["result"] = json.loads(tmp["result"])
@@ -33,19 +32,53 @@ def run_result(sample_id):
 		csv_strings["pipeline"] = tbp.dict_list2csv(json_results["pipline_table"],["Analysis","Program"])
 		csv_strings["version"] = json_results["tbprofiler_version"]
 		csv_strings["db_version"] = json_results["db_version"]
-		csv = tbp.load_csv(csv_strings)
-		return Response(csv,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=%s.csv" % sample_id})
+		csv_text = tbp.load_csv(csv_strings)
+		return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=%s.csv" % sample_id})
 	return render_template('results/run_result.html',run=run)
 
 
 
 
 
+@bp.route('/sra',methods=('GET', 'POST'))
+def sra():
+	db = get_db()
+	if request.method=='POST':
+		if "search_strains_button" in request.form:
+			sql_query = "select id,sample_name,created,status,lineage,drtype from results WHERE public = 1"
+			filters = []
+			key_values = list(request.form.lists())
+			flash(key_values)
+			for key,values in list(request.form.lists()):
+				if values==[""]:
+					continue
+				elif key=="run_id":
+					filters.append("( %s )" % (" OR ".join(["sample_name = '%s'" % (run_id.strip()) for run_id in values[0].split(",")])))
+				elif key=="project_id":
+					pass
+					# filters.append("( %s )" % (" OR ".join(["project_id = '%s'" % (run_id.strip()) for run_id in values[0].split(",")])))
+				elif key=="drtype":
+					filters.append("( %s )" % (" OR ".join(["drtype = '%s'" % (drtype) for drtype in values])))
+				elif key=="lineage":
+					filters.append("( %s )" % (" OR ".join(["lineage LIKE '%s%%'" % (lineage.strip()) for lineage in values[0].split(",")])))
+				else:
+					pass
 
-######## Unused Code ###########
+				# filters.append("( %s )" % (" OR ".join(["%s %s '%s%s%s'" % (column,operator,decorator,x,decorator) for x in values])))
+			if len(filters)>0:
+				sql_query = sql_query + " AND %s" % (" AND ".join(filters))
+			flash(sql_query)
+			tmp = db.execute(sql_query).fetchall()
+			return render_template('results/SRA.html',results = tmp)
+		else:
+			print(request.form)
+			cmd = "select * from full_results where id in ( %s )" % ", ".join(["'%s'" % request.form[x] for x in request.form])
+			data = db.execute(cmd).fetchall()
+			fieldnames = [x["name"] for x in  db.execute("PRAGMA table_info(full_results)").fetchall()]
+			csv_text = ",".join(fieldnames) + "\n"
+			for row in data:
+				csv_text = csv_text + ",".join(['"%s"' % row[c] if (row[c]!=None and row[c]!="") else '"-"' for c in fieldnames]) + "\n"
+			print(csv_text)
+			return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=result.csv"})
 
-# @bp.route('/results')
-# def result_table():
-# 	db = get_db()
-# 	tmp = db.execute("select id,sample_name,created,status,lineage,drtype from results").fetchall()
-# 	return render_template('results/result_table.html',results=tmp)
+	return render_template('results/SRA.html')

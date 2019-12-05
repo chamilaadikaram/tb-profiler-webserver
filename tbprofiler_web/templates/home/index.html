@@ -7,9 +7,12 @@
 {% endblock %}
 
 {% block content %}
-	<div class="row">
-		<div class="col-md-12 pt-4">
-			<h4>TB-Profiler</h4>
+	<div class="row text-center mx-auto">
+		<div class="col-md-1">
+
+		</div>
+		<div class="col-md-10 pt-4">
+			<h3>TB-Profiler</h3>
 			<div class="pb-4">
 				Welcome to the webserver of TB-Profiler - a pipeline which allows users
 				to analyse <i>M. tuberculosis</i> whole genome sequencing data to
@@ -19,7 +22,7 @@
 
 
 
-			<h6 class="">How does it work?</h6>
+			<h5 class="">How does it work?</h5>
 			<div class="pb-4">
 				The pipeline searches for small variants and big deletions associated
 				with drug resistance. It will also report the lineage. By default it
@@ -30,7 +33,7 @@
 
 			<div class="row justify-content-md-center">
 				<div class="col-md-6 pb-4">
-					<div class="card text-center">
+					<div class="card border-dark text-center">
 					  <div class="card-header">
 					    Step 1
 					  </div>
@@ -41,7 +44,8 @@
 										Upload your next generation sequencing data in <b>fastQ</b> format.
 										You can upload one or two (forward and reverse) fastq files. When you
 										upload your data, the run will be be assigned a unique ID.
-										Please take a note of this ID as you will need to to find your results later
+										Please take a note of this ID as you will need to to find your results later.
+										Batch upload of samples is also possible.
 									</p>
 
 
@@ -54,7 +58,7 @@
 
 			<div class="row justify-content-md-center">
 				<div class="col-md-6 pb-4">
-					<div class="card text-center">
+					<div class="card border-dark text-center">
 					  <div class="card-header">
 					    Step 2
 					  </div>
@@ -80,7 +84,7 @@
 
 
 
-			<h6 class="pt-4">Which mutations are being used to prodict resistance?</h6>
+			<h5 class="pt-4">Which mutations are being used to prodict resistance?</h5>
 			<div class="pb-4">
 				Resistance is predicted using the curated <a href="https://github.com/jodyphelan/tbdb">tbdb database</a>.
 				This database has been tested using over 17,000 samples with genptypic and
@@ -89,9 +93,33 @@
 				up to date CSV file <a href="https://github.com/jodyphelan/tbdb/blob/master/tbdb.csv">here</a>.
 			</div>
 
+			<h5 class="pt-4">Need to analyse isolates from the SRA?</h5>
+			<div class="pb-4">
+				To benchmark the performance we have run TB-Profiler for over 16,000
+				publically available <i>M. tuberculosis</i> isolates. We have made these
+				available <a href="{{ url_for('results.sra') }}">here</a>. With each new
+				release	of TB-Profiler we will update all result files.
+			</div>
 
+			<h5 class="pt-4">Can I run TB-Profiler on my own computer?</h5>
+			<div class="pb-4">
+				If you have access to a linux or osX operating system then you can download
+				the commandline version of TB-Profiler. For more information on this please
+				visit the	<a href="https://github.com/jodyphelan/TBProfiler/">github repository</a>
+				If you would like to create your own instance of this webserver, the code
+				is fully open-source and available at this <a href="https://github.com/jodyphelan/tb-profiler-webserver/">github repository</a>
+			</div>
 
-			<h6 class="pt-4">Citation</h6>
+			<h5 class="pt-4">Give feedback or request a feature</h5>
+			<div class="pb-4">
+				We are always looking to improve TB-Profiler. If you see some results that
+				don't look right or would like to see some additional functionality in the
+				future, don't hesitate to get in touch via the
+				<a href="https://github.com/jodyphelan/tb-profiler-webserver/issues"></a>
+				section on our github page.
+			</div>
+
+			<h5 class="pt-4">Citation</h5>
 			<div class="pb-4">
 				Phelan, J. E. et al. Integrating informatics tools and portable sequencing
 				technology for rapid detection of resistance to anti-tuberculous drugs.

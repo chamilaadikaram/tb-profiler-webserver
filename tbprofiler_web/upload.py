@@ -31,10 +31,11 @@ def run_sample(db,uniq_id,f1,f2=None):
 def upload():
 	db = get_db()
 	if request.method == 'POST':
+		print(request.form)
 		error=None
 		if "single_sample_submit" in request.form:
 			uniq_id = str(uuid.uuid4())
-			if filename1=="":
+			if request.files['file1'].filename=="":
 				error = "No file found for read 1, please try again!"
 			if error==None:
 				run_sample(db,uniq_id,request.files['file1'],request.files['file2'])
