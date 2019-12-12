@@ -28,7 +28,7 @@ def tbprofiler(fq1,fq2,uniq_id,sample_name,db,storage_dir):
 	drug_order = ["isoniazid","rifampicin","ethambutol","pyrazinamide","streptomycin","ethionamide","fluoroquinolones","amikacin","capreomycin","kanamycin"]
 
 	results = pp.profiler(conf=conf,prefix=storage_dir+"/"+sample_name,r1=fq1,r2=fq2,bam_file=None,call_method="low",min_depth=10,threads=3,platform="Illumina",mapper="bwa",run_delly=True)
-	results = tbp.reformat(results,conf)
+	results = tbp.reformat(results,conf,reporting_af=0.1)
 	results["id"] = sample_name
 	results["tbprofiler_version"] = tbp._VERSION
 	outfile = "%s.results.json" % (storage_dir+"/"+sample_name)

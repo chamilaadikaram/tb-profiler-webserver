@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 import json
-#from aseantb.auth import login_required
+from tbprofiler_web.auth import login_required
 from tbprofiler_web.db import get_db
 import tbprofiler as tbp
 bp = Blueprint('results', __name__)
@@ -42,10 +42,19 @@ def run_result(sample_id):
 
 @bp.route('/sra',methods=('GET', 'POST'))
 def sra():
+	return result_table(request,"public")
+
+@login_required
+@bp.route('/user',methods=('GET', 'POST'))
+def user_index():
+	return result_table(request,g.user['username'])
+
+
+def result_table(request,user):
 	db = get_db()
 	if request.method=='POST':
 		if "search_strains_button" in request.form:
-			sql_query = "select id,sample_name,created,status,lineage,drtype from results WHERE public = 1"
+			sql_query = "select id,sample_name,created,status,lineage,drtype from results WHERE user_id = '%s'" % user
 			filters = []
 			key_values = list(request.form.lists())
 			flash(key_values)
@@ -69,16 +78,24 @@ def sra():
 				sql_query = sql_query + " AND %s" % (" AND ".join(filters))
 			flash(sql_query)
 			tmp = db.execute(sql_query).fetchall()
-			return render_template('results/SRA.html',results = tmp)
+			return render_template('results/result_table.html',results = tmp, user=user)
 		else:
-			print(request.form)
-			cmd = "select * from full_results where id in ( %s )" % ", ".join(["'%s'" % request.form[x] for x in request.form])
-			data = db.execute(cmd).fetchall()
-			fieldnames = [x["name"] for x in  db.execute("PRAGMA table_info(full_results)").fetchall()]
-			csv_text = ",".join(fieldnames) + "\n"
-			for row in data:
-				csv_text = csv_text + ",".join(['"%s"' % row[c] if (row[c]!=None and row[c]!="") else '"-"' for c in fieldnames]) + "\n"
-			print(csv_text)
-			return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=result.csv"})
-
-	return render_template('results/SRA.html')
+			# print(request.form)
+			if request.form["button"]=="download":
+				ids = list(json.loads(request.form["ids"]).keys())
+				cmd = "select * from full_results where id in ( %s )" % ", ".join(["'%s'" % x for x in ids])
+				data = db.execute(cmd).fetchall()
+				fieldnames = [x["name"] for x in  db.execute("PRAGMA table_info(full_results)").fetchall()]
+				csv_text = ",".join(fieldnames) + "\n"
+				for row in data:
+					csv_text = csv_text + ",".join(['"%s"' % row[c] if (row[c]!=None and row[c]!="") else '"-"' for c in fieldnames]) + "\n"
+				print(csv_text)
+				return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=result.csv"})
+			elif request.form["button"]=="delete":
+				ids = list(json.loads(request.form["ids"]).keys())
+				cmd = "DELETE FROM results WHERE id in ( %s )" % ", ".join(["'%s'" % x for x in ids])
+				print(cmd)
+				flash(cmd)
+				db.execute(cmd)
+				db.commit()
+	return render_template('results/result_table.html', user=user)

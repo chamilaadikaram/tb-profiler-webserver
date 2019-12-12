@@ -6,7 +6,6 @@ CREATE TABLE results (
   id TEXT PRIMARY KEY,
 	sample_name TEXT NOT NULL,
 	status TEXT DEFAULT "processing",
-	public BIT,
 	project_id TEXT,
 	result TEXT,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,5 +51,7 @@ CREATE TABLE users (
   username TEXT UNIQUE NOT NULL,
 	forename TEXT,
 	surname TEXT,
+	institution TEXT,
+	country TEXT,
   password TEXT NOT NULL
 );

@@ -14,7 +14,7 @@ from tbprofiler_web.utils import get_fastq_md5
 import re
 bp = Blueprint('upload', __name__)
 
-def run_sample(db,uniq_id,f1,f2=None):
+def run_sample(db,user_id,uniq_id,f1,f2=None):
 	filename1 = secure_filename(f1.filename)
 	filename2 = secure_filename(f2.filename)
 	f1.save(os.path.join(app.config["UPLOAD_FOLDER"], filename1))
@@ -23,7 +23,7 @@ def run_sample(db,uniq_id,f1,f2=None):
 	server_fname1 = "/tmp/%s" % filename1
 	server_fname2 = "/tmp/%s" % filename2 if filename2!="" else None
 	sample_name = uniq_id
-	db.execute("INSERT INTO results (id,sample_name,result) VALUES (?,?,?)",(uniq_id,sample_name,"{}"))
+	db.execute("INSERT INTO results (id,user_id,sample_name,result) VALUES (?,?,?,?)",(uniq_id,user_id,sample_name,"{}"))
 	db.commit()
 	tbprofiler.delay(fq1=server_fname1,fq2=server_fname2,uniq_id=uniq_id,sample_name=sample_name,db=app.config["DATABASE"],storage_dir=app.config["UPLOAD_FOLDER"])
 
@@ -38,7 +38,7 @@ def upload():
 			if request.files['file1'].filename=="":
 				error = "No file found for read 1, please try again!"
 			if error==None:
-				run_sample(db,uniq_id,request.files['file1'],request.files['file2'])
+				run_sample(db,g.user['username'],uniq_id,request.files['file1'],request.files['file2'])
 				return redirect(url_for('results.run_result', sample_id=uniq_id))
 		elif "multi_sample_submit" in request.form:
 			files = {f.filename:f for f in list(request.files.lists())[0][1]}
@@ -66,7 +66,7 @@ def upload():
 			if error==None:
 				csv_text = "ID,R1,R2\n" + "\n".join(["%(ID)s,%(R1)s,%(R2)s" % d for d in runs])
 				for run in runs:
-					run_sample(db,run["ID"],files[run["R1"]],files[run["R2"]])
+					run_sample(db,g.user['username'],run["ID"],files[run["R1"]],files[run["R2"]])
 
 				return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=tb-profiler-IDs.csv"})
 
