@@ -43,20 +43,23 @@
 
 		    </ul>
 
-				<ul class="navbar-nav my-2 my-lg-0">
+				<!-- <ul class="navbar-nav my-2 my-lg-0">
 					{% if g.user %}
 		      	<li class="nav-item">
-							<a class="btn btn-outline-primary mx-4" href="{{ url_for('results.user_index') }}">{{ g.user['username'] }}</a>
+							<a class="btn btn-outline-primary mr-4" href="{{ url_for('users.user_results') }}">{{ g.user['username'] }}</a>
 						</li>
 						<li class="nav-item">
 		        	<a class="btn btn-outline-primary" href="{{ url_for('auth.logout') }}">Logout</a>
 						</li>
 					{% else %}
+						<li class="nav-item pr-4">
+							<a class="btn btn-outline-success float-right" href="{{ url_for('auth.register') }}">Register</a>
+						</li>
 						<li class="nav-item">
 							<a class="btn btn-outline-primary" href="{{ url_for('auth.login') }}">Login</a>
 		      	</li>
 					{% endif %}
-		    </ul>
+		    </ul> -->
 			</div>
 		</nav>
 

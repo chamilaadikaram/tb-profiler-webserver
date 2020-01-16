@@ -44,11 +44,6 @@ def run_result(sample_id):
 def sra():
 	return result_table(request,"public")
 
-@login_required
-@bp.route('/user',methods=('GET', 'POST'))
-def user_index():
-	return result_table(request,g.user['username'])
-
 
 def result_table(request,user):
 	db = get_db()
@@ -57,11 +52,10 @@ def result_table(request,user):
 			sql_query = "select id,sample_name,created,status,lineage,drtype from results WHERE user_id = '%s'" % user
 			filters = []
 			key_values = list(request.form.lists())
-			flash(key_values)
 			for key,values in list(request.form.lists()):
 				if values==[""]:
 					continue
-				elif key=="run_id":
+				elif key=="sample_name":
 					filters.append("( %s )" % (" OR ".join(["sample_name = '%s'" % (run_id.strip()) for run_id in values[0].split(",")])))
 				elif key=="project_id":
 					pass
@@ -73,10 +67,8 @@ def result_table(request,user):
 				else:
 					pass
 
-				# filters.append("( %s )" % (" OR ".join(["%s %s '%s%s%s'" % (column,operator,decorator,x,decorator) for x in values])))
 			if len(filters)>0:
 				sql_query = sql_query + " AND %s" % (" AND ".join(filters))
-			flash(sql_query)
 			tmp = db.execute(sql_query).fetchall()
 			return render_template('results/result_table.html',results = tmp, user=user)
 		else:
@@ -84,6 +76,7 @@ def result_table(request,user):
 			if request.form["button"]=="download":
 				ids = list(json.loads(request.form["ids"]).keys())
 				cmd = "select * from full_results where id in ( %s )" % ", ".join(["'%s'" % x for x in ids])
+				print(cmd)
 				data = db.execute(cmd).fetchall()
 				fieldnames = [x["name"] for x in  db.execute("PRAGMA table_info(full_results)").fetchall()]
 				csv_text = ",".join(fieldnames) + "\n"
@@ -94,8 +87,6 @@ def result_table(request,user):
 			elif request.form["button"]=="delete":
 				ids = list(json.loads(request.form["ids"]).keys())
 				cmd = "DELETE FROM results WHERE id in ( %s )" % ", ".join(["'%s'" % x for x in ids])
-				print(cmd)
-				flash(cmd)
 				db.execute(cmd)
 				db.commit()
 	return render_template('results/result_table.html', user=user)

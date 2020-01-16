@@ -13,7 +13,7 @@
 		<div class="card-header">Summary</div>
 		<div class="card-body text-dark">
 			<p class="card-text"><b>Run ID:</b> {{ run["id"] }}</p>
-			<p class="card-text"><b>Sample name:</b> {{ run["result"]["id"] }}</p>
+			<p class="card-text"><b>Sample name:</b> {{ run["sample_name"] }}</p>
 			<p class="card-text"><b>Date:</b> {{ run["created"] }}</p>
 			<p class="card-text"><b>Strain:</b> {{ run["result"]["sublin"] }}</p>
 			<p class="card-text"><b>Drug-resistance:</b> {{ utils.drtype_badge(run["result"]["drtype"]) }}</p>
