@@ -1,0 +1,4 @@
+include aseantb/schema.sql
+graft aseantb/static
+graft aseantb/templates
+global-exclude *.pyc
