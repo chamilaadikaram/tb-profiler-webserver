@@ -1,4 +1,4 @@
-include aseantb/schema.sql
-graft aseantb/static
-graft aseantb/templates
+include tbprofiler_web/schema.sql
+graft tbprofiler_web/static
+graft tbprofiler_web/templates
 global-exclude *.pyc
