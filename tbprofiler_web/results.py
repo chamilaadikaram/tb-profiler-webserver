@@ -63,7 +63,7 @@ def result_table(request,user):
 				elif key=="drtype":
 					filters.append("( %s )" % (" OR ".join(["drtype = '%s'" % (drtype) for drtype in values])))
 				elif key=="lineage":
-					filters.append("( %s )" % (" OR ".join(["lineage LIKE '%s%%'" % (lineage.strip()) for lineage in values[0].split(",")])))
+					filters.append("( %s )" % (" OR ".join(["lineage LIKE 'lineage%s%%'" % (lineage.strip().replace("lineage","")) for lineage in values[0].split(",")])))
 				else:
 					pass
 
