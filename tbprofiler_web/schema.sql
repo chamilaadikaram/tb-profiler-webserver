@@ -8,7 +8,7 @@ CREATE TABLE results (
 	status TEXT DEFAULT "processing",
 	project_id TEXT,
 	result TEXT,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	user_id TEXT,
 	lineage TEXT,
 	drtype TEXT
