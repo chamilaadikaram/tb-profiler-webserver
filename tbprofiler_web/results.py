@@ -76,13 +76,11 @@ def result_table(request,user):
 			if request.form["button"]=="download":
 				ids = list(json.loads(request.form["ids"]).keys())
 				cmd = "select * from full_results where id in ( %s )" % ", ".join(["'%s'" % x for x in ids])
-				print(cmd)
 				data = db.execute(cmd).fetchall()
 				fieldnames = [x["name"] for x in  db.execute("PRAGMA table_info(full_results)").fetchall()]
 				csv_text = ",".join(fieldnames) + "\n"
 				for row in data:
 					csv_text = csv_text + ",".join(['"%s"' % row[c] if (row[c]!=None and row[c]!="") else '"-"' for c in fieldnames]) + "\n"
-				print(csv_text)
 				return Response(csv_text,mimetype="text/csv",headers={"Content-disposition": "attachment; filename=result.csv"})
 			elif request.form["button"]=="delete":
 				ids = list(json.loads(request.form["ids"]).keys())
