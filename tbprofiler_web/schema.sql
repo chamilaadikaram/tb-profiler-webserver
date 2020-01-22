@@ -55,3 +55,12 @@ CREATE TABLE users (
 	country TEXT,
   password TEXT NOT NULL
 );
+
+CREATE TABLE mutations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    gene TEXT NOT NULL,
+    change TEXT NOT NULL,
+    locus_tag TEXT NOT NULL,
+    drugs TEXT NOT NULL,
+    confidence TEXT NOT NULL
+)
