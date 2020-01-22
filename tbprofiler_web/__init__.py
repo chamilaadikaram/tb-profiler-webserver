@@ -44,4 +44,7 @@ def create_app(test_config=None):
 	# from . import users
 	# app.register_blueprint(users.bp)
 
+    # from . import mutations
+	# app.register_blueprint(mutations.bp)
+
 	return app
